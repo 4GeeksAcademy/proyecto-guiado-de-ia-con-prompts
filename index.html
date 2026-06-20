@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentHub Admin</title>
+  <script>
+    const tailwindVariantStyle = document.createElement('style');
+    tailwindVariantStyle.type = 'text/tailwindcss';
+    tailwindVariantStyle.textContent = '@custom-variant dark (&:where(.dark, .dark *));';
+    document.head.appendChild(tailwindVariantStyle);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-full bg-slate-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen lg:grid lg:grid-cols-[17rem_1fr]">
+    <aside class="border-b border-slate-200 bg-slate-950 text-slate-100 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-slate-800">
+      <div class="px-6 py-5">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">AgentHub</p>
+        <h1 class="mt-2 text-2xl font-semibold text-white">Panel de administracion</h1>
+        <p class="mt-2 max-w-xs text-sm text-slate-400">Supervisa agentes alquilados, usuarios, skills, contratos y errores desde una sola vista.</p>
+      </div>
+      <nav aria-label="Secciones principales" class="px-3 pb-5 lg:px-4">
+        <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-1">
+          <li>
+            <button type="button" data-nav-target="dashboard" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-indigo-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-18v7h6V2h-6Z" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Dashboard</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-nav-target="usuarios" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-emerald-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Usuarios</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-nav-target="agentes" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-indigo-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <rect x="4" y="7" width="16" height="10" rx="3"/>
+                  <path d="M9 11h.01M15 11h.01M12 7V4M8 20h8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Agentes</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-nav-target="skills" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-amber-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="m14 7 5 5-9 9H5v-5l9-9Z" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="m12 9 3 3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 5 19 8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Skills</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-nav-target="contratos" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-emerald-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="M8 7V3m8 4V3M5 11h14" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="3" y="5" width="18" height="16" rx="2"/>
+                </svg>
+              </span>
+              <span>Contrataciones</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-nav-target="errores" class="nav-link flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-amber-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="M12 9v4" stroke-linecap="round"/>
+                  <path d="M12 17h.01" stroke-linecap="round"/>
+                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94A2 2 0 0 0 22.18 18L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Log de errores</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="min-w-0">
+      <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-slate-50/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/85">
+        <div class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between lg:px-8">
+          <div>
+            <p class="text-sm font-medium text-indigo-700 dark:text-indigo-300">Operaciones</p>
+            <h2 id="section-title" class="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Dashboard</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+              Sincronizacion simulada con datos hardcodeados
+            </div>
+            <button id="theme-toggle" type="button" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-indigo-400 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-300">
+              <span id="theme-toggle-icon" class="text-base">☀</span>
+              <span id="theme-toggle-label">Modo oscuro</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-5 py-6 lg:px-8">
+        <section id="section-dashboard" data-section="dashboard" class="space-y-6">
+          <div id="metrics-grid" class="grid gap-5 md:grid-cols-2"></div>
+          <div class="flex min-h-64 items-center justify-center rounded-[2rem] border-2 border-dashed border-slate-300 bg-white/70 px-6 py-16 text-center text-sm font-medium text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-400">
+            Grafico de actividad semanal
+          </div>
+        </section>
+
+        <section id="section-usuarios" data-section="usuarios" class="hidden space-y-6">
+          <div class="rounded-[2rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div class="border-b border-slate-200 px-6 py-5 dark:border-slate-800">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Gestion de usuarios</h3>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Clientes y administradores con su plan actual y estado operativo.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+                <thead class="bg-slate-50 dark:bg-slate-950/50">
+                  <tr class="text-left text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                    <th scope="col" class="px-6 py-4">Nombre</th>
+                    <th scope="col" class="px-6 py-4">Email</th>
+                    <th scope="col" class="px-6 py-4">Plan</th>
+                    <th scope="col" class="px-6 py-4">Estado</th>
+                    <th scope="col" class="px-6 py-4 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body" class="divide-y divide-slate-200 text-sm dark:divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-agentes" data-section="agentes" class="hidden space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Gestion de agentes</h3>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Configura prompts, revisa estados y expande las skills activas de cada agente.</p>
+          </div>
+          <div id="agents-list" class="space-y-4"></div>
+        </section>
+
+        <section id="section-skills" data-section="skills" class="hidden space-y-6">
+          <div class="rounded-[2rem] border border-slate-200 bg-white px-6 py-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Skills</h3>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Una skill en AgentHub es una capacidad adjunta a un agente que amplia lo que puede hacer, como navegar por la web, leer documentos, coordinar agendas o resumir contextos operativos.</p>
+          </div>
+          <div id="skills-grid" class="grid gap-5 xl:grid-cols-2"></div>
+        </section>
+
+        <section id="section-contratos" data-section="contratos" class="hidden space-y-6">
+          <div class="rounded-[2rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div class="border-b border-slate-200 px-6 py-5 dark:border-slate-800">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Contrataciones de agentes</h3>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Alquileres vigentes e historicos con desglose por skill contratada.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+                <thead class="bg-slate-50 dark:bg-slate-950/50">
+                  <tr class="text-left text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                    <th scope="col" class="px-6 py-4">Cliente</th>
+                    <th scope="col" class="px-6 py-4">Agente</th>
+                    <th scope="col" class="px-6 py-4">Skills</th>
+                    <th scope="col" class="px-6 py-4">Inicio</th>
+                    <th scope="col" class="px-6 py-4">Fin</th>
+                    <th scope="col" class="px-6 py-4">Estado</th>
+                    <th scope="col" class="px-6 py-4">Importe</th>
+                    <th scope="col" class="px-6 py-4 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="contracts-table-body" class="divide-y divide-slate-200 text-sm dark:divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-errores" data-section="errores" class="hidden space-y-6">
+          <div class="rounded-[2rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div class="border-b border-slate-200 px-6 py-5 dark:border-slate-800">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Log de errores</h3>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Incidencias recientes con trazas completas y resolucion manual para el equipo operativo.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+                <thead class="bg-slate-50 dark:bg-slate-950/50">
+                  <tr class="text-left text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                    <th scope="col" class="px-6 py-4">Timestamp</th>
+                    <th scope="col" class="px-6 py-4">Agente</th>
+                    <th scope="col" class="px-6 py-4">Gravedad</th>
+                    <th scope="col" class="px-6 py-4">Descripcion</th>
+                    <th scope="col" class="px-6 py-4 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="errors-table-body" class="divide-y divide-slate-200 text-sm dark:divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="modal-root" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6">
+    <div data-modal-backdrop class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
+    <div class="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5 dark:border-slate-800">
+        <div>
+          <h3 id="modal-title" class="text-lg font-semibold text-slate-900 dark:text-white"></h3>
+          <p id="modal-subtitle" class="mt-1 text-sm text-slate-500 dark:text-slate-400"></p>
+        </div>
+        <button id="modal-close" type="button" class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" aria-label="Cerrar modal">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m6 6 12 12M18 6 6 18" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div id="modal-body" class="max-h-[calc(90vh-92px)] overflow-y-auto px-6 py-5"></div>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      metrics: [
+        { label: 'Ingresos totales', value: '$48,250', accent: 'emerald', icon: 'trend' },
+        { label: 'Perdidas por descuentos', value: '$4,180', accent: 'rose', icon: 'discount' },
+        { label: 'Agentes activos', value: '18', accent: 'indigo', icon: 'agents' },
+        { label: 'Agentes fallando', value: '3', accent: 'amber', icon: 'warning' }
+      ],
+      users: [
+        { id: 'user-1', name: 'Lucia Torres', email: 'lucia@novahealth.io', plan: 'Enterprise', status: 'activo', registeredAt: '2026-01-14' },
+        { id: 'user-2', name: 'Marcos Pena', email: 'marcos@deltaops.ai', plan: 'Pro', status: 'activo', registeredAt: '2026-02-03' },
+        { id: 'user-3', name: 'Sara Medina', email: 'sara@aurafinance.com', plan: 'Free', status: 'suspendido', registeredAt: '2025-11-21' },
+        { id: 'user-4', name: 'Diego Rios', email: 'diego@greenpulse.co', plan: 'Pro', status: 'activo', registeredAt: '2026-04-19' },
+        { id: 'user-5', name: 'Ines Valera', email: 'ines@northscale.dev', plan: 'Enterprise', status: 'activo', registeredAt: '2026-05-02' }
+      ],
+      skills: [
+        { id: 'web-nav', name: 'Web Navigator', description: 'Explora sitios web, recopila fuentes y devuelve resumenes accionables.', fullDescription: 'Permite al agente navegar por sitios internos y externos, capturar evidencias, validar fuentes y resumir hallazgos para equipos comerciales y de soporte.', agents: ['Atlas Support', 'Mercury Sales', 'Pulse Ops'] },
+        { id: 'doc-reader', name: 'Document Reader', description: 'Lee PDFs, contratos y documentacion operativa para extraer contexto.', fullDescription: 'Procesa documentos largos, localiza clausulas relevantes, compara versiones y expone hallazgos con referencias para auditoria interna.', agents: ['Atlas Support', 'Beacon HR', 'Pulse Ops'] },
+        { id: 'calendar-sync', name: 'Calendar Sync', description: 'Coordina agendas y agenda reuniones entre equipos y clientes.', fullDescription: 'Sincroniza disponibilidad, propone franjas horarias y registra reuniones de seguimiento para procesos de onboarding y soporte premium.', agents: ['Beacon HR', 'Mercury Sales'] },
+        { id: 'incident-summary', name: 'Incident Summary', description: 'Agrupa eventos y genera resumenes de incidentes operativos.', fullDescription: 'Correlaciona logs, clasifica gravedad y redacta reportes de estado para equipos de operaciones antes de una escalacion humana.', agents: ['Pulse Ops', 'Atlas Support'] }
+      ],
+      agents: [
+        {
+          id: 'agent-1',
+          name: 'Atlas Support',
+          owner: 'Lucia Torres',
+          status: 'activo',
+          skillIds: ['web-nav', 'doc-reader', 'incident-summary'],
+          prompt: 'Eres Atlas Support. Ayuda a resolver incidencias de clientes enterprise con respuestas claras, contextualizadas y trazables.'
+        },
+        {
+          id: 'agent-2',
+          name: 'Mercury Sales',
+          owner: 'Marcos Pena',
+          status: 'activo',
+          skillIds: ['web-nav', 'calendar-sync'],
+          prompt: 'Eres Mercury Sales. Detecta oportunidades de upsell y prepara seguimientos comerciales con tono consultivo.'
+        },
+        {
+          id: 'agent-3',
+          name: 'Beacon HR',
+          owner: 'Ines Valera',
+          status: 'inactivo',
+          skillIds: ['doc-reader', 'calendar-sync'],
+          prompt: 'Eres Beacon HR. Asistes en onboarding, revisas politicas y coordinas entrevistas sin perder el contexto del candidato.'
+        },
+        {
+          id: 'agent-4',
+          name: 'Pulse Ops',
+          owner: 'Diego Rios',
+          status: 'fallando',
+          skillIds: ['web-nav', 'doc-reader', 'incident-summary'],
+          prompt: 'Eres Pulse Ops. Monitorea flujos operativos, prioriza incidentes y recomienda acciones correctivas al equipo de turno.'
+        }
+      ],
+      contracts: [
+        {
+          id: 'contract-1',
+          client: 'NovaHealth',
+          agentName: 'Atlas Support',
+          skillIds: ['web-nav', 'doc-reader', 'incident-summary'],
+          startDate: '2026-05-01',
+          endDate: '2026-10-31',
+          amount: '$12,500',
+          status: 'activo',
+          customerContact: 'Lucia Torres',
+          pricing: [
+            { skillId: 'web-nav', price: '$1,800' },
+            { skillId: 'doc-reader', price: '$1,200' },
+            { skillId: 'incident-summary', price: '$900' }
+          ]
+        },
+        {
+          id: 'contract-2',
+          client: 'DeltaOps',
+          agentName: 'Mercury Sales',
+          skillIds: ['web-nav', 'calendar-sync'],
+          startDate: '2026-03-15',
+          endDate: '2026-09-15',
+          amount: '$9,200',
+          status: 'activo',
+          customerContact: 'Marcos Pena',
+          pricing: [
+            { skillId: 'web-nav', price: '$1,800' },
+            { skillId: 'calendar-sync', price: '$950' }
+          ]
+        },
+        {
+          id: 'contract-3',
+          client: 'NorthScale',
+          agentName: 'Beacon HR',
+          skillIds: ['doc-reader', 'calendar-sync'],
+          startDate: '2025-12-10',
+          endDate: '2026-04-10',
+          amount: '$7,450',
+          status: 'finalizado',
+          customerContact: 'Ines Valera',
+          pricing: [
+            { skillId: 'doc-reader', price: '$1,200' },
+            { skillId: 'calendar-sync', price: '$950' }
+          ]
+        },
+        {
+          id: 'contract-4',
+          client: 'GreenPulse',
+          agentName: 'Pulse Ops',
+          skillIds: ['web-nav', 'doc-reader', 'incident-summary'],
+          startDate: '2026-01-20',
+          endDate: '2026-07-20',
+          amount: '$11,800',
+          status: 'activo',
+          customerContact: 'Diego Rios',
+          pricing: [
+            { skillId: 'web-nav', price: '$1,800' },
+            { skillId: 'doc-reader', price: '$1,200' },
+            { skillId: 'incident-summary', price: '$900' }
+          ]
+        }
+      ],
+      errors: [
+        { id: 'err-1', timestamp: '2026-06-20 08:14', agentName: 'Pulse Ops', severity: 'critico', summary: 'Timeout al consultar el dashboard de operaciones.', trace: 'TimeoutError: upstream monitor did not respond within 12000ms\n at fetchStatusBoard (/agents/pulse-ops/runtime.js:118:17)\n at processQueue (/agents/pulse-ops/runtime.js:203:9)', resolved: false },
+        { id: 'err-2', timestamp: '2026-06-20 07:42', agentName: 'Atlas Support', severity: 'advertencia', summary: 'Documento adjunto omitido por formato no soportado.', trace: 'Warning: attachment mime type application/x-zip-compressed skipped\n at ingestAttachment (/agents/atlas-support/docs.js:57:13)', resolved: false },
+        { id: 'err-3', timestamp: '2026-06-20 06:55', agentName: 'Mercury Sales', severity: 'info', summary: 'Reintento exitoso de sincronizacion con CRM.', trace: 'Info: retry succeeded after transient 502 from CRM gateway\n at syncLeadStage (/agents/mercury-sales/crm.js:89:22)', resolved: true },
+        { id: 'err-4', timestamp: '2026-06-19 22:31', agentName: 'Pulse Ops', severity: 'critico', summary: 'Fallo de autenticacion al recuperar bitacora externa.', trace: 'AuthError: token expired for external incident feed\n at retrieveIncidentFeed (/agents/pulse-ops/feed.js:44:11)', resolved: false },
+        { id: 'err-5', timestamp: '2026-06-19 18:09', agentName: 'Beacon HR', severity: 'advertencia', summary: 'Agenda duplicada detectada y omitida.', trace: 'Warning: duplicate booking prevented for candidate 8821\n at createInterviewSlot (/agents/beacon-hr/calendar.js:132:7)', resolved: true },
+        { id: 'err-6', timestamp: '2026-06-19 14:48', agentName: 'Atlas Support', severity: 'info', summary: 'Contexto de politica actualizado desde repositorio documental.', trace: 'Info: policy snapshot refreshed from compliance bucket\n at refreshPolicyContext (/agents/atlas-support/policy.js:26:5)', resolved: false }
+      ]
+    };
+
+    const state = {
+      currentSection: 'dashboard',
+      dropdownId: null,
+      modalOpen: false,
+      expandedAgents: new Set()
+    };
+
+    const sectionTitles = {
+      dashboard: 'Dashboard',
+      usuarios: 'Gestion de usuarios',
+      agentes: 'Gestion de agentes',
+      skills: 'Skills',
+      contratos: 'Contrataciones de agentes',
+      errores: 'Log de errores'
+    };
+
+    const root = document.documentElement;
+    const metricsGrid = document.getElementById('metrics-grid');
+    const usersTableBody = document.getElementById('users-table-body');
+    const agentsList = document.getElementById('agents-list');
+    const skillsGrid = document.getElementById('skills-grid');
+    const contractsTableBody = document.getElementById('contracts-table-body');
+    const errorsTableBody = document.getElementById('errors-table-body');
+    const modalRoot = document.getElementById('modal-root');
+    const modalTitle = document.getElementById('modal-title');
+    const modalSubtitle = document.getElementById('modal-subtitle');
+    const modalBody = document.getElementById('modal-body');
+    const sectionTitle = document.getElementById('section-title');
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleLabel = document.getElementById('theme-toggle-label');
+    const themeToggleIcon = document.getElementById('theme-toggle-icon');
+
+    const statusClasses = {
+      activo: 'bg-emerald-100 text-emerald-700 ring-1 ring-inset ring-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-500/20',
+      suspendido: 'bg-rose-100 text-rose-700 ring-1 ring-inset ring-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:ring-rose-500/20',
+      inactivo: 'bg-slate-200 text-slate-700 ring-1 ring-inset ring-slate-300 dark:bg-slate-700/50 dark:text-slate-300 dark:ring-slate-600',
+      fallando: 'bg-rose-100 text-rose-700 ring-1 ring-inset ring-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:ring-rose-500/20',
+      finalizado: 'bg-slate-200 text-slate-700 ring-1 ring-inset ring-slate-300 dark:bg-slate-700/50 dark:text-slate-300 dark:ring-slate-600',
+      critico: 'bg-rose-100 text-rose-700 ring-1 ring-inset ring-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:ring-rose-500/20',
+      advertencia: 'bg-amber-100 text-amber-700 ring-1 ring-inset ring-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-500/20',
+      info: 'bg-indigo-100 text-indigo-700 ring-1 ring-inset ring-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:ring-indigo-500/20'
+    };
+
+    const planClasses = {
+      Free: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
+      Pro: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300',
+      Enterprise: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+    };
+
+    function metricIcon(icon) {
+      const icons = {
+        trend: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 16l5-5 4 4 7-8" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 7h-5" stroke-linecap="round"/><path d="M20 7v5" stroke-linecap="round"/></svg>',
+        discount: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16" stroke-linecap="round"/><path d="M7 7h.01M17 17h.01" stroke-linecap="round"/><path d="m7 17 10-10" stroke-linecap="round"/></svg>',
+        agents: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="7" width="16" height="10" rx="3"/><path d="M9 11h.01M15 11h.01M12 7V4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        warning: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4" stroke-linecap="round"/><path d="M12 17h.01" stroke-linecap="round"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94A2 2 0 0 0 22.18 18L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      };
+      return icons[icon] || icons.agents;
+    }
+
+    function getSkill(skillId) {
+      return data.skills.find((skill) => skill.id === skillId);
+    }
+
+    function renderBadge(value, label) {
+      return '<span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ' + (statusClasses[value] || statusClasses.info) + '">' + (label || value) + '</span>';
+    }
+
+    function renderPlan(plan) {
+      return '<span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ' + (planClasses[plan] || planClasses.Free) + '">' + plan + '</span>';
+    }
+
+    function renderActionButton(targetId, type) {
+      return '<div class="relative inline-flex justify-end"><button type="button" data-dropdown-toggle="' + targetId + '" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300" aria-label="Abrir acciones">⋮</button><div data-dropdown-menu="' + targetId + '" class="pointer-events-none absolute right-0 top-12 z-10 hidden min-w-44 rounded-2xl border border-slate-200 bg-white p-2 text-sm shadow-xl dark:border-slate-700 dark:bg-slate-900"><button type="button" data-action="detail" data-entity-type="' + type + '" data-entity-id="' + targetId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Ver detalle</button><button type="button" data-action="delete" data-entity-type="' + type + '" data-entity-id="' + targetId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-rose-600 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-500/10">Eliminar</button></div></div>';
+    }
+
+    function renderAgentActionButton(agentId) {
+      return '<div class="relative inline-flex justify-end"><button type="button" data-dropdown-toggle="' + agentId + '" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300" aria-label="Abrir acciones">⋮</button><div data-dropdown-menu="' + agentId + '" class="pointer-events-none absolute right-0 top-12 z-10 hidden min-w-44 rounded-2xl border border-slate-200 bg-white p-2 text-sm shadow-xl dark:border-slate-700 dark:bg-slate-900"><button type="button" data-action="configure" data-entity-type="agent" data-entity-id="' + agentId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Configurar</button><button type="button" data-action="delete" data-entity-type="agent" data-entity-id="' + agentId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-rose-600 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-500/10">Eliminar</button></div></div>';
+    }
+
+    function renderErrorActionButton(errorId) {
+      return '<div class="relative inline-flex justify-end"><button type="button" data-dropdown-toggle="' + errorId + '" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300" aria-label="Abrir acciones">⋮</button><div data-dropdown-menu="' + errorId + '" class="pointer-events-none absolute right-0 top-12 z-10 hidden min-w-48 rounded-2xl border border-slate-200 bg-white p-2 text-sm shadow-xl dark:border-slate-700 dark:bg-slate-900"><button type="button" data-action="detail" data-entity-type="error" data-entity-id="' + errorId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Ver detalle</button><button type="button" data-action="resolve" data-entity-type="error" data-entity-id="' + errorId + '" class="flex w-full rounded-xl px-3 py-2 text-left text-emerald-600 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-500/10">Marcar como resuelto</button></div></div>';
+    }
+
+    function renderMetrics() {
+      const accentClasses = {
+        emerald: 'border-emerald-200 bg-emerald-50/80 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300',
+        rose: 'border-rose-200 bg-rose-50/80 text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300',
+        indigo: 'border-indigo-200 bg-indigo-50/80 text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300',
+        amber: 'border-amber-200 bg-amber-50/80 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300'
+      };
+      metricsGrid.innerHTML = data.metrics.map((metric) => '<article class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"><div class="flex items-start justify-between gap-4"><div><p class="text-sm font-medium text-slate-500 dark:text-slate-400">' + metric.label + '</p><p class="mt-4 text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">' + metric.value + '</p></div><div class="flex h-14 w-14 items-center justify-center rounded-2xl border ' + accentClasses[metric.accent] + '">' + metricIcon(metric.icon) + '</div></div></article>').join('');
+    }
+
+    function renderUsers() {
+      usersTableBody.innerHTML = data.users.map((user) => '<tr class="text-slate-700 dark:text-slate-200"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">' + user.name + '</td><td class="px-6 py-4 text-slate-500 dark:text-slate-400">' + user.email + '</td><td class="px-6 py-4">' + renderPlan(user.plan) + '</td><td class="px-6 py-4">' + renderBadge(user.status, user.status === 'activo' ? 'Activo' : 'Suspendido') + '</td><td class="px-6 py-4 text-right">' + renderActionButton(user.id, 'user') + '</td></tr>').join('');
+    }
+
+    function renderAgents() {
+      agentsList.innerHTML = data.agents.map((agent) => {
+        const skills = agent.skillIds.map((skillId) => getSkill(skillId));
+        const expanded = state.expandedAgents.has(agent.id);
+        return '<article class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"><div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"><div><div class="flex flex-wrap items-center gap-3"><h4 class="text-lg font-semibold text-slate-900 dark:text-white">' + agent.name + '</h4>' + renderBadge(agent.status, agent.status === 'activo' ? 'Activo' : agent.status === 'inactivo' ? 'Inactivo' : 'Fallando') + '</div><p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Propietario: ' + agent.owner + '</p></div><div class="flex items-center gap-3"><button type="button" data-expand-agent="' + agent.id + '" aria-expanded="' + String(expanded) + '" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-300"><span>Ver skills</span><svg viewBox="0 0 24 24" data-expand-icon="' + agent.id + '" class="h-4 w-4 transition-transform duration-300 ' + (expanded ? 'rotate-180' : '') + '" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' + renderAgentActionButton(agent.id) + '</div></div><div data-agent-panel="' + agent.id + '" class="grid overflow-hidden transition-all duration-300 ease-out ' + (expanded ? 'mt-5 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0') + '"><div class="min-h-0"><div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Skills habilitadas</p><div class="mt-3 flex flex-wrap gap-2">' + skills.map((skill) => '<span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">' + skill.name + '</span>').join('') + '</div></div></div></div></article>';
+      }).join('');
+    }
+
+    function renderSkills() {
+      skillsGrid.innerHTML = data.skills.map((skill) => '<article class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"><div class="flex items-start justify-between gap-4"><div><h4 class="text-lg font-semibold text-slate-900 dark:text-white">' + skill.name + '</h4><p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">' + skill.description + '</p></div>' + renderActionButton(skill.id, 'skill') + '</div><div class="mt-5 inline-flex items-center rounded-2xl bg-amber-100 px-3 py-2 text-sm font-semibold text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">' + skill.agents.length + ' agentes habilitados</div></article>').join('');
+    }
+
+    function renderContracts() {
+      contractsTableBody.innerHTML = data.contracts.map((contract) => {
+        const skills = contract.skillIds.map((skillId) => getSkill(skillId));
+        return '<tr class="align-top text-slate-700 dark:text-slate-200"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">' + contract.client + '</td><td class="px-6 py-4">' + contract.agentName + '</td><td class="px-6 py-4"><div class="flex flex-wrap gap-2">' + skills.map((skill) => '<span class="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">' + skill.name + '</span>').join('') + '</div></td><td class="px-6 py-4 text-slate-500 dark:text-slate-400">' + contract.startDate + '</td><td class="px-6 py-4 text-slate-500 dark:text-slate-400">' + contract.endDate + '</td><td class="px-6 py-4">' + renderBadge(contract.status, contract.status === 'activo' ? 'Activo' : 'Finalizado') + '</td><td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">' + contract.amount + '</td><td class="px-6 py-4 text-right">' + renderActionButton(contract.id, 'contract') + '</td></tr>';
+      }).join('');
+    }
+
+    function renderErrors() {
+      errorsTableBody.innerHTML = data.errors.map((error) => {
+        const rowClass = error.resolved ? 'opacity-55 line-through' : '';
+        return '<tr class="align-top text-slate-700 transition dark:text-slate-200 ' + rowClass + '"><td class="px-6 py-4 text-slate-500 dark:text-slate-400">' + error.timestamp + '</td><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">' + error.agentName + '</td><td class="px-6 py-4">' + renderBadge(error.severity, error.severity === 'critico' ? 'Critico' : error.severity === 'advertencia' ? 'Advertencia' : 'Info') + '</td><td class="px-6 py-4">' + error.summary + '</td><td class="px-6 py-4 text-right">' + renderErrorActionButton(error.id) + '</td></tr>';
+      }).join('');
+    }
+
+    function renderAll() {
+      renderMetrics();
+      renderUsers();
+      renderAgents();
+      renderSkills();
+      renderContracts();
+      renderErrors();
+      syncOpenDropdown();
+      updateNavState();
+    }
+
+    function updateNavState() {
+      sectionTitle.textContent = sectionTitles[state.currentSection];
+      document.querySelectorAll('[data-section]').forEach((section) => {
+        section.classList.toggle('hidden', section.dataset.section !== state.currentSection);
+      });
+      document.querySelectorAll('.nav-link').forEach((button) => {
+        const isActive = button.dataset.navTarget === state.currentSection;
+        button.classList.toggle('bg-indigo-600', isActive);
+        button.classList.toggle('text-white', isActive);
+        button.classList.toggle('shadow-lg', isActive);
+        button.classList.toggle('shadow-indigo-950/30', isActive);
+        button.classList.toggle('hover:bg-slate-900', !isActive);
+      });
+    }
+
+    function syncOpenDropdown() {
+      document.querySelectorAll('[data-dropdown-menu]').forEach((menu) => {
+        const isOpen = menu.dataset.dropdownMenu === state.dropdownId;
+        menu.classList.toggle('hidden', !isOpen);
+        menu.classList.toggle('pointer-events-none', !isOpen);
+      });
+    }
+
+    function closeDropdown() {
+      state.dropdownId = null;
+      syncOpenDropdown();
+    }
+
+    function openModal(title, subtitle, bodyMarkup) {
+      modalTitle.textContent = title;
+      modalSubtitle.textContent = subtitle || '';
+      modalBody.innerHTML = bodyMarkup;
+      modalRoot.classList.remove('hidden');
+      modalRoot.classList.add('flex');
+      state.modalOpen = true;
+      closeDropdown();
+    }
+
+    function closeModal() {
+      modalRoot.classList.add('hidden');
+      modalRoot.classList.remove('flex');
+      modalBody.innerHTML = '';
+      state.modalOpen = false;
+    }
+
+    function openDetailModal(entityType, entityId) {
+      if (entityType === 'user') {
+        const user = data.users.find((item) => item.id === entityId);
+        openModal(user.name, 'Registro completo del usuario', '<div class="space-y-4 text-sm text-slate-600 dark:text-slate-300"><div class="grid gap-4 sm:grid-cols-2"><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Email</p><p class="mt-2 text-base font-medium text-slate-900 dark:text-white">' + user.email + '</p></div><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Plan</p><p class="mt-2">' + renderPlan(user.plan) + '</p></div><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Estado</p><p class="mt-2">' + renderBadge(user.status, user.status === 'activo' ? 'Activo' : 'Suspendido') + '</p></div><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Fecha de registro</p><p class="mt-2 text-base font-medium text-slate-900 dark:text-white">' + user.registeredAt + '</p></div></div></div>');
+      }
+      if (entityType === 'skill') {
+        const skill = data.skills.find((item) => item.id === entityId);
+        openModal(skill.name, 'Detalle de la skill', '<div class="space-y-5 text-sm text-slate-600 dark:text-slate-300"><div class="rounded-2xl bg-slate-50 p-4 leading-6 dark:bg-slate-950/60">' + skill.fullDescription + '</div><div><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Agentes asociados</p><div class="mt-3 flex flex-wrap gap-2">' + skill.agents.map((agentName) => '<span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">' + agentName + '</span>').join('') + '</div></div></div>');
+      }
+      if (entityType === 'contract') {
+        const contract = data.contracts.find((item) => item.id === entityId);
+        const rows = contract.pricing.map((line) => {
+          const skill = getSkill(line.skillId);
+          return '<tr><td class="py-3 pr-4 font-medium text-slate-900 dark:text-white">' + skill.name + '</td><td class="py-3 text-right text-slate-600 dark:text-slate-300">' + line.price + '</td></tr>';
+        }).join('');
+        openModal(contract.client + ' - ' + contract.agentName, 'Desglose completo de la contratacion', '<div class="space-y-5 text-sm text-slate-600 dark:text-slate-300"><div class="grid gap-4 sm:grid-cols-2"><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Cliente</p><p class="mt-2 text-base font-medium text-slate-900 dark:text-white">' + contract.client + '</p><p class="mt-2">Contacto: ' + contract.customerContact + '</p></div><div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950/60"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Vigencia</p><p class="mt-2">' + contract.startDate + ' a ' + contract.endDate + '</p><p class="mt-2">Estado: ' + renderBadge(contract.status, contract.status === 'activo' ? 'Activo' : 'Finalizado') + '</p></div></div><div class="rounded-2xl border border-slate-200 p-4 dark:border-slate-700"><table class="min-w-full text-sm"><thead><tr class="border-b border-slate-200 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:border-slate-700 dark:text-slate-400"><th class="pb-3 pr-4">Skill</th><th class="pb-3 text-right">Precio</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr class="border-t border-slate-200 dark:border-slate-700"><td class="pt-4 font-semibold text-slate-900 dark:text-white">Total</td><td class="pt-4 text-right font-semibold text-slate-900 dark:text-white">' + contract.amount + '</td></tr></tfoot></table></div></div>');
+      }
+      if (entityType === 'error') {
+        const error = data.errors.find((item) => item.id === entityId);
+        openModal(error.agentName, error.summary, '<div class="space-y-5 text-sm text-slate-600 dark:text-slate-300"><div class="flex flex-wrap items-center gap-3"><div>' + renderBadge(error.severity, error.severity === 'critico' ? 'Critico' : error.severity === 'advertencia' ? 'Advertencia' : 'Info') + '</div><p class="text-slate-500 dark:text-slate-400">' + error.timestamp + '</p></div><pre class="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs leading-6 text-slate-100">' + error.trace + '</pre></div>');
+      }
+    }
+
+    function openAgentConfig(agentId) {
+      const agent = data.agents.find((item) => item.id === agentId);
+      openModal(agent.name, 'Prompt de sistema editable', '<div class="space-y-4"><label for="agent-prompt" class="text-sm font-medium text-slate-700 dark:text-slate-200">Prompt de sistema</label><textarea id="agent-prompt" class="min-h-56 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-indigo-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" spellcheck="false">' + agent.prompt + '</textarea><p class="text-sm text-slate-500 dark:text-slate-400">El textarea es editable para simular la configuracion del agente dentro del panel.</p></div>');
+    }
+
+    function toggleAgentSkills(agentId) {
+      const panel = document.querySelector('[data-agent-panel="' + agentId + '"]');
+      const button = document.querySelector('[data-expand-agent="' + agentId + '"]');
+      const icon = document.querySelector('[data-expand-icon="' + agentId + '"]');
+      if (!panel || !button || !icon) {
+        return;
+      }
+
+      const isExpanded = state.expandedAgents.has(agentId);
+      if (isExpanded) {
+        state.expandedAgents.delete(agentId);
+      } else {
+        state.expandedAgents.add(agentId);
+      }
+
+      button.setAttribute('aria-expanded', String(!isExpanded));
+      panel.classList.toggle('mt-5', !isExpanded);
+      panel.classList.toggle('grid-rows-[1fr]', !isExpanded);
+      panel.classList.toggle('opacity-100', !isExpanded);
+      panel.classList.toggle('grid-rows-[0fr]', isExpanded);
+      panel.classList.toggle('opacity-0', isExpanded);
+      icon.classList.toggle('rotate-180', !isExpanded);
+    }
+
+    function showSection(sectionKey) {
+      state.currentSection = sectionKey;
+      updateNavState();
+      closeDropdown();
+    }
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      root.classList.toggle('dark', isDark);
+      themeToggleLabel.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+      themeToggleIcon.textContent = isDark ? '☾' : '☀';
+      localStorage.setItem('agenthub-theme', theme);
+    }
+
+    function toggleTheme() {
+      applyTheme(root.classList.contains('dark') ? 'light' : 'dark');
+    }
+
+    function deleteEntity(entityType) {
+      const labels = {
+        user: 'usuario',
+        agent: 'agente',
+        skill: 'skill',
+        contract: 'contrato',
+        error: 'entrada del log'
+      };
+      openModal('Accion simulada', 'Sin persistencia real', '<p class="text-sm leading-6 text-slate-600 dark:text-slate-300">La accion de eliminar ' + labels[entityType] + ' esta simulada porque el panel usa datos hardcodeados sin backend. El dropdown y la confirmacion modal cumplen el flujo solicitado.</p>');
+    }
+
+    function resolveError(errorId) {
+      const error = data.errors.find((item) => item.id === errorId);
+      if (!error) {
+        return;
+      }
+      error.resolved = true;
+      renderErrors();
+      closeDropdown();
+    }
+
+    document.addEventListener('click', (event) => {
+      const navButton = event.target.closest('[data-nav-target]');
+      if (navButton) {
+        showSection(navButton.dataset.navTarget);
+        return;
+      }
+
+      const expandButton = event.target.closest('[data-expand-agent]');
+      if (expandButton) {
+        toggleAgentSkills(expandButton.dataset.expandAgent);
+        return;
+      }
+
+      const dropdownToggle = event.target.closest('[data-dropdown-toggle]');
+      if (dropdownToggle) {
+        const nextId = dropdownToggle.dataset.dropdownToggle;
+        state.dropdownId = state.dropdownId === nextId ? null : nextId;
+        syncOpenDropdown();
+        return;
+      }
+
+      const actionButton = event.target.closest('[data-action]');
+      if (actionButton) {
+        const action = actionButton.dataset.action;
+        const entityType = actionButton.dataset.entityType;
+        const entityId = actionButton.dataset.entityId;
+        if (action === 'detail') {
+          openDetailModal(entityType, entityId);
+        }
+        if (action === 'configure') {
+          openAgentConfig(entityId);
+        }
+        if (action === 'delete') {
+          deleteEntity(entityType);
+        }
+        if (action === 'resolve') {
+          resolveError(entityId);
+        }
+        return;
+      }
+
+      if (event.target.closest('[data-modal-backdrop]')) {
+        closeModal();
+        return;
+      }
+
+      if (!event.target.closest('[data-dropdown-menu]')) {
+        closeDropdown();
+      }
+    });
+
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    themeToggle.addEventListener('click', toggleTheme);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (state.modalOpen) {
+          closeModal();
+        }
+        closeDropdown();
+      }
+    });
+
+    const storedTheme = localStorage.getItem('agenthub-theme');
+    applyTheme(storedTheme || 'light');
+    renderAll();
+    updateNavState();
+  </script>
+</body>
+</html>
